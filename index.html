@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PropValue AI | Real Estate Analytics Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            50: '#fdf4ff',
+                            500: '#a855f7',
+                            600: '#9333ea',
+                            700: '#7c3aed',
+                            800: '#6b21a8',
+                            900: '#581c87',
+                        },
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #0ea5e9 0%, #a855f7 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #0ea5e9;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .feature-icon {
+            background: linear-gradient(135deg, #0ea5e9 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-home text-2xl text-primary-600 mr-2"></i>
+                        <span class="text-xl font-bold text-gray-900">PropValue <span class="text-primary-600">AI</span></span>
+                    </div>
+                    <div class="hidden md:ml-10 md:flex md:space-x-8">
+                        <a href="#features" class="nav-link text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium">Features</a>
+                        <a href="#predictor" class="nav-link text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium">Price Predictor</a>
+                        <a href="#analytics" class="nav-link text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium">Analytics</a>
+                        <a href="#testimonials" class="nav-link text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium">Testimonials</a>
+                        <a href="#pricing" class="nav-link text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium">Pricing</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <a href="#" class="text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium">Sign In</a>
+                    <a href="#" class="ml-4 bg-primary-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-primary-700 transition duration-300">Start Free Trial</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="text-center animate-fade-in">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">AI-Powered Real Estate <span class="bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-orange-300">Analytics</span></h1>
+                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">Make smarter property investments with our advanced machine learning platform. Accurate valuations, market insights, and predictive analytics.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#predictor" class="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition duration-300 shadow-lg">Try Price Predictor</a>
+                    <a href="#pricing" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary-600 transition duration-300">View Plans</a>
+                </div>
+            </div>
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6 animate-slide-up">
+                    <i class="fas fa-bolt text-3xl mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Instant Valuations</h3>
+                    <p class="opacity-80">Get accurate property valuations in seconds with our AI models</p>
+                </div>
+                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6 animate-slide-up" style="animation-delay: 0.1s;">
+                    <i class="fas fa-chart-line text-3xl mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Market Trends</h3>
+                    <p class="opacity-80">Analyze historical data and predict future market movements</p>
+                </div>
+                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6 animate-slide-up" style="animation-delay: 0.2s;">
+                    <i class="fas fa-shield-alt text-3xl mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Investment Insights</h3>
+                    <p class="opacity-80">Identify high-potential properties with our risk analysis tools</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Powerful Features for Real Estate Professionals</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Our platform combines cutting-edge AI with comprehensive market data to give you an unbeatable advantage</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Advanced Property Valuation Engine</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-check-circle text-primary-600 text-lg"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-900">Machine Learning Accuracy</h4>
+                                <p class="text-gray-600 mt-1">Our models achieve 94% accuracy in property valuation, trained on millions of data points.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-check-circle text-primary-600 text-lg"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-900">Real-time Market Adjustments</h4>
+                                <p class="text-gray-600 mt-1">Valuations update automatically based on current market conditions and trends.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-check-circle text-primary-600 text-lg"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-semibold text-gray-900">Comprehensive Factor Analysis</h4>
+                                <p class="text-gray-600 mt-1">We analyze 50+ factors including location, amenities, market trends, and economic indicators.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-primary-50 to-secondary-50 rounded-2xl p-8 card-hover">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h4 class="font-semibold text-gray-900">Valuation Accuracy</h4>
+                                <p class="text-sm text-gray-600">Compared to actual sale prices</p>
+                            </div>
+                            <div class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">94%</div>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Residential Properties</span>
+                                    <span>96%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full">
+                                    <div class="h-2 bg-green-500 rounded-full" style="width: 96%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Commercial Properties</span>
+                                    <span>92%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full">
+                                    <div class="h-2 bg-blue-500 rounded-full" style="width: 92%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Luxury Properties</span>
+                                    <span>89%</span>
+                                </div>
+                                <div class="h-2 bg-gray-200 rounded-full">
+                                    <div class="h-2 bg-purple-500 rounded-full" style="width: 89%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Price Predictor Section -->
+    <section id="predictor" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">AI Property Price Predictor</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Get an instant, accurate valuation for any property using our advanced machine learning model</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Input Panel -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-2xl shadow-lg p-8 card-hover">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-ruler-combined mr-2 text-primary-600"></i>Total Area (sqft)
+                                </label>
+                                <input type="number" id="area" min="300" max="5000" value="1200" 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-bed mr-2 text-primary-600"></i>Bedrooms
+                                </label>
+                                <select id="bedrooms" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300">
+                                    <option value="1">1 Bedroom</option>
+                                    <option value="2">2 Bedrooms</option>
+                                    <option value="3" selected>3 Bedrooms</option>
+                                    <option value="4">4 Bedrooms</option>
+                                    <option value="5">5+ Bedrooms</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-bath mr-2 text-primary-600"></i>Bathrooms
+                                </label>
+                                <select id="bathrooms" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300">
+                                    <option value="1">1 Bathroom</option>
+                                    <option value="2" selected>2 Bathrooms</option>
+                                    <option value="3">3 Bathrooms</option>
+                                    <option value="4">4+ Bathrooms</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-map-marker-alt mr-2 text-primary-600"></i>Location
+                                </label>
+                                <select id="location" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition duration-300">
+                                    <option value="suburb">Suburban Area</option>
+                                    <option value="downtown">Downtown/City Center</option>
+                                    <option value="riverside">Riverside</option>
+                                    <option value="hillside">Hillside</option>
+                                    <option value="commercial">Commercial Zone</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-calendar-alt mr-2 text-primary-600"></i>Property Age (years)
+                            </label>
+                            <input type="range" id="age" min="0" max="50" value="5" 
+                                   class="w-full mt-2">
+                            <div class="flex justify-between text-sm text-gray-600 mt-1">
+                                <span>New Construction</span>
+                                <span id="age-display">5 years</span>
+                                <span>50+ years</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <label class="block text-sm font-medium text-gray-700 mb-4">
+                                <i class="fas fa-swimming-pool mr-2 text-primary-600"></i>Select Amenities
+                            </label>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="amenity-checkbox rounded text-primary-600 focus:ring-primary-500" value="pool">
+                                    <span class="text-gray-700">Swimming Pool</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="amenity-checkbox rounded text-primary-600 focus:ring-primary-500" value="garden">
+                                    <span class="text-gray-700">Garden</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="amenity-checkbox rounded text-primary-600 focus:ring-primary-500" value="parking" checked>
+                                    <span class="text-gray-700">Parking</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="amenity-checkbox rounded text-primary-600 focus:ring-primary-500" value="security">
+                                    <span class="text-gray-700">Security</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="amenity-checkbox rounded text-primary-600 focus:ring-primary-500" value="gym">
+                                    <span class="text-gray-700">Gym</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="amenity-checkbox rounded text-primary-600 focus:ring-primary-500" value="concierge">
+                                    <span class="text-gray-700">Concierge</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="amenity-checkbox rounded text-primary-600 focus:ring-primary-500" value="elevator">
+                                    <span class="text-gray-700">Elevator</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="amenity-checkbox rounded text-primary-600 focus:ring-primary-500" value="balcony">
+                                    <span class="text-gray-700">Balcony</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button id="predict-btn" class="w-full bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition-all duration-300 shadow-lg">
+                            <i class="fas fa-calculator mr-2"></i>Calculate Property Value
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Panel -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl shadow-lg p-8 sticky top-8 card-hover">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Valuation Results</h3>
+                        
+                        <div id="prediction-result" class="hidden">
+                            <div class="bg-gradient-to-r from-primary-600 to-secondary-600 rounded-xl p-6 text-white text-center mb-6">
+                                <h3 class="text-xl font-semibold mb-2">Estimated Market Value</h3>
+                                <h2 class="text-3xl font-bold mb-2" id="prediction-value">₹ 0.00 L</h2>
+                                <p class="opacity-90 text-sm">Confidence Score: <span id="confidence-score" class="font-semibold">92%</span></p>
+                            </div>
+
+                            <div class="mb-6">
+                                <h4 class="text-lg font-semibold text-gray-800 mb-4">Price Breakdown</h4>
+                                <div id="breakdown-chart" class="h-48"></div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Price per sqft</span>
+                                    <span class="font-semibold" id="price-per-sqft">₹ 0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Market Trend</span>
+                                    <span class="font-semibold text-green-600" id="market-trend">+5.2%</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">Rental Yield</span>
+                                    <span class="font-semibold" id="rental-yield">3.8%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="prediction-placeholder" class="text-center py-12">
+                            <i class="fas fa-home text-4xl text-gray-300 mb-4"></i>
+                            <p class="text-gray-500">Enter property details and click "Calculate" to see valuation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section id="analytics" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Market Analytics & Insights</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Comprehensive market data and predictive analytics to inform your investment decisions</p>
+            </div>
+            
+            <!-- Market Overview -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                <div class="bg-gradient-to-br from-primary-50 to-blue-50 rounded-xl p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Average Price</p>
+                            <p class="text-2xl font-bold text-gray-900">₹45.2L</p>
+                        </div>
+                        <div class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">+2.3%</div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-secondary-50 to-purple-50 rounded-xl p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Price per SqFt</p>
+                            <p class="text-2xl font-bold text-gray-900">₹4,250</p>
+                        </div>
+                        <div class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">+1.8%</div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Properties Listed</p>
+                            <p class="text-2xl font-bold text-gray-900">1,247</p>
+                        </div>
+                        <div class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">-5.2%</div>
+                    </div>
+                </div>
+                <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-6 card-hover">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-600">Days on Market</p>
+                            <p class="text-2xl font-bold text-gray-900">32</p>
+                        </div>
+                        <div class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">-3.1%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Price Distribution</h3>
+                    <div id="price-distribution-chart" class="h-80"></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Price by Bedrooms</h3>
+                    <div id="bedroom-price-chart" class="h-80"></div>
+                </div>
+            </div>
+
+            <!-- Market Trends -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Price Trends Over Time</h3>
+                    <div id="price-trend-chart" class="h-80"></div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Area vs Price Correlation</h3>
+                    <div id="area-price-chart" class="h-80"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Trusted by Real Estate Professionals</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">See how our platform is transforming property valuation and investment decisions</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-full flex items-center justify-center text-white font-bold text-lg">SR</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-900">Sarah Johnson</h4>
+                            <p class="text-sm text-gray-600">Real Estate Broker</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"PropValue AI has revolutionized how we price properties. The accuracy is incredible, and our clients love the detailed breakdowns."</p>
+                    <div class="flex text-yellow-400 mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-full flex items-center justify-center text-white font-bold text-lg">MR</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-900">Michael Rodriguez</h4>
+                            <p class="text-sm text-gray-600">Property Investor</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"The market insights and predictive analytics have helped me identify undervalued properties and maximize my investment returns."</p>
+                    <div class="flex text-yellow-400 mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-full flex items-center justify-center text-white font-bold text-lg">EP</div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-900">Emily Patterson</h4>
+                            <p class="text-sm text-gray-600">Property Developer</h4>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"This platform has become an essential tool in our development planning. The accuracy of predictions has significantly reduced our risk."</p>
+                    <div class="flex text-yellow-400 mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Choose the plan that works best for you. All plans include a 14-day free trial.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Basic Plan -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 card-hover">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Starter</h3>
+                        <p class="text-gray-600 mb-4">Perfect for individual investors</p>
+                        <div class="flex justify-center items-baseline">
+                            <span class="text-4xl font-bold text-gray-900">$29</span>
+                            <span class="text-gray-600 ml-2">/month</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Up to 10 property valuations per month</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Basic market analytics</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Email support</span>
+                        </li>
+                        <li class="flex items-center text-gray-400">
+                            <i class="fas fa-times mr-3"></i>
+                            <span>Advanced predictive analytics</span>
+                        </li>
+                        <li class="flex items-center text-gray-400">
+                            <i class="fas fa-times mr-3"></i>
+                            <span>API access</span>
+                        </li>
+                    </ul>
+                    <button class="w-full bg-gray-100 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-200 transition duration-300">Start Free Trial</button>
+                </div>
+                
+                <!-- Professional Plan -->
+                <div class="bg-gradient-to-br from-primary-600 to-secondary-600 rounded-2xl shadow-xl p-8 card-hover transform scale-105 relative">
+                    <div class="absolute top-0 right-0 bg-yellow-500 text-white text-xs font-bold px-4 py-1 rounded-bl-lg rounded-tr-lg">MOST POPULAR</div>
+                    <div class="text-center mb-8 text-white">
+                        <h3 class="text-2xl font-bold mb-2">Professional</h3>
+                        <p class="opacity-90 mb-4">For real estate agents and brokers</p>
+                        <div class="flex justify-center items-baseline">
+                            <span class="text-4xl font-bold">$79</span>
+                            <span class="opacity-90 ml-2">/month</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-4 mb-8 text-white">
+                        <li class="flex items-center">
+                            <i class="fas fa-check mr-3"></i>
+                            <span>Unlimited property valuations</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check mr-3"></i>
+                            <span>Advanced market analytics</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check mr-3"></i>
+                            <span>Priority email & chat support</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check mr-3"></i>
+                            <span>Predictive market trends</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check mr-3"></i>
+                            <span>Basic API access</span>
+                        </li>
+                    </ul>
+                    <button class="w-full bg-white text-primary-600 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">Start Free Trial</button>
+                </div>
+                
+                <!-- Enterprise Plan -->
+                <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 card-hover">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Enterprise</h3>
+                        <p class="text-gray-600 mb-4">For large agencies and developers</p>
+                        <div class="flex justify-center items-baseline">
+                            <span class="text-4xl font-bold text-gray-900">$199</span>
+                            <span class="text-gray-600 ml-2">/month</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Unlimited valuations + team accounts</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Full analytics suite</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>24/7 phone support</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Advanced predictive models</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Full API access & customization</span>
+                        </li>
+                    </ul>
+                    <button class="w-full bg-gray-100 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-200 transition duration-300">Start Free Trial</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Real Estate Business?</h2>
+            <p class="text-xl mb-8 opacity-90">Join thousands of professionals using PropValue AI to make smarter property decisions</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#" class="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition duration-300 shadow-lg">Start 14-Day Free Trial</a>
+                <a href="#" class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary-600 transition duration-300">Schedule a Demo</a>
+            </div>
+            <p class="mt-6 text-sm opacity-80">No credit card required • Cancel anytime</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-home text-2xl text-primary-500 mr-2"></i>
+                        <span class="text-xl font-bold">PropValue <span class="text-primary-500">AI</span></span>
+                    </div>
+                    <p class="text-gray-400 mb-4">AI-powered real estate analytics for smarter property investments.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Product</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition duration-300">Features</a></li>
+                        <li><a href="#predictor" class="text-gray-400 hover:text-white transition duration-300">Price Predictor</a></li>
+                        <li><a href="#analytics" class="text-gray-400 hover:text-white transition duration-300">Market Analytics</a></li>
+                        <li><a href="#pricing" class="text-gray-400 hover:text-white transition duration-300">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Company</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Careers</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-4">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Cookie Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 PropValue AI. All rights reserved. Built with ❤️ by Akshay</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
